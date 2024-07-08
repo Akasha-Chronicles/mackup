@@ -66,6 +66,18 @@ class ApplicationProfile(object):
         for filename in self.files:
             (home_filepath, mackup_filepath) = self.getFilepaths(filename)
 
+            supported = utils.can_file_be_synced_on_current_platform(filename)
+            if not supported:
+                if self.verbose:
+                    print(
+                        "Skipping\n  {}\n  is not supported on this platform".format(
+                            filename
+                        )
+                    )
+                else:
+                    print("Skipping {} ...".format(filename))
+                continue
+
             # If the file exists and is not already a link pointing to Mackup
             if (os.path.isfile(home_filepath) or os.path.isdir(home_filepath)) and not (
                 os.path.islink(home_filepath)
@@ -155,7 +167,7 @@ class ApplicationProfile(object):
 
             # If the file exists and is not already pointing to the mackup file
             # and the folder makes sense on the current platform (Don't sync
-            # any subfolder of ~/Library on GNU/Linux)
+            # any subfolder of ~/Library on GNU/Linux and MacOS)
             file_or_dir_exists = os.path.isfile(mackup_filepath) or os.path.isdir(
                 mackup_filepath
             )

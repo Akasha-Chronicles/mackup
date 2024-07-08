@@ -340,7 +340,7 @@ def can_file_be_synced_on_current_platform(path):
 
     Check if it makes sense to sync the file at the given path on the current
     platform.
-    For now we don't sync any file in the ~/Library folder on GNU/Linux.
+    For now we don't sync any file in the ~/Library folder on GNU/Linux and MacOS.
     There might be other exceptions in the future.
 
     Args:
@@ -362,7 +362,7 @@ def can_file_be_synced_on_current_platform(path):
     # not any file/folder named LibrarySomething
     library_path = os.path.join(os.environ["HOME"], "Library/")
 
-    if platform.system() == constants.PLATFORM_LINUX:
+    if platform.system() == constants.PLATFORM_LINUX or platform.system() == constants.PLATFORM_DARWIN:
         if fullpath.startswith(library_path):
             can_be_synced = False
 
